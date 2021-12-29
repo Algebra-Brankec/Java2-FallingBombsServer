@@ -79,11 +79,15 @@ public class Game {
                     }
                 }
 
-                SpawnBombs();
-                MoveBombs();
-                CheckBombCollision();
-                ClearBombsOutsideMap();
-
+                try {
+                    SpawnBombs();
+                    MoveBombs();
+                    CheckBombCollision();
+                    ClearBombsOutsideMap(); 
+                } catch (Exception e){
+                    
+                }
+                
                 t1.setUdpPackage(getUDPDataPackage());
             }
         });  
@@ -133,13 +137,6 @@ public class Game {
         
         for (int i = 0; i < bombs.size(); i++) {
             if (bombs.get(i).getY() - deleteLine - bombs.get(i).getHeight() > 0) {
-                
-                //System.out.print("index: " + i + ", \r\n");
-                //System.out.print("bomb: " + bombs.get(i).getX() + ", \r\n");
-                //System.out.print("Map height: " + deleteLine + ", \r\n");
-                //System.out.print("Bomb height: " + bombs.get(i).getX() + ", \r\n");
-                //System.out.print("Calculated: " + (bombs.get(i).getX() - deleteLine) + ", \r\n\r\n");
-            
                 bombsToClear.add(i);
                 bombs.get(i).setActive(false);
             }
@@ -176,7 +173,7 @@ public class Game {
         unicastServThread1.setDaemon(true);
         unicastServThread1.start();
         
-        //unicastServThread2 = new UnicastServerThread(12346);
+        //unicastServThread2 = new UnicastServerThread(8080);
         //unicastServThread2.setDaemon(true);
         //unicastServThread2.start();
     }

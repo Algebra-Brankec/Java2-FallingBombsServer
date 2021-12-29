@@ -15,13 +15,15 @@ import java.io.ObjectOutputStream;
  */
 public final class ObjectUtil {
     public static byte[] objectToByteArray(Object obj) throws IOException {
-        byte[] objBytes;
+        byte[] objBytes = new byte[0];
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 ObjectOutputStream oos = new ObjectOutputStream(baos)) {
             oos.writeObject(obj);
             oos.flush();
             objBytes = baos.toByteArray();
             
+            return objBytes;
+        } catch(Exception e){
             return objBytes;
         }
     }

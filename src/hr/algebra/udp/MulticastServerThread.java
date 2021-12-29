@@ -83,25 +83,32 @@ public class MulticastServerThread extends Thread {
         }
     }
     
-    private void sendUDPDataPackage(DatagramSocket serverSocket) throws IOException {
-        byte[] buffer = ObjectUtil.objectToByteArray(udpPackage);
+    private void sendUDPDataPackage(DatagramSocket serverSocket) {
+        try {
+            byte[] buffer = ObjectUtil.objectToByteArray(udpPackage);
 
-        // before sending byte[], write byte[].length into payload
-        byte[] numberOfBufferBytes = ByteUtils.intToByteArray(buffer.length);
-        InetAddress groupAddress = InetAddress.getByName(PROPERTIES.getProperty(GROUP));
-        DatagramPacket packet = new DatagramPacket(
-                numberOfBufferBytes,
-                numberOfBufferBytes.length,
-                groupAddress, Integer.valueOf(PROPERTIES.getProperty(CLIENT_PORT))
-        );
-        serverSocket.send(packet);
+            // before sending byte[], write byte[].length into payload
+            byte[] numberOfBufferBytes = ByteUtils.intToByteArray(buffer.length);
+            InetAddress groupAddress = InetAddress.getByName(PROPERTIES.getProperty(GROUP));
+            DatagramPacket packet = new DatagramPacket(
+                    numberOfBufferBytes,
+                    numberOfBufferBytes.length,
+                    groupAddress, Integer.valueOf(PROPERTIES.getProperty(CLIENT_PORT))
+            );
+            serverSocket.send(packet);
 
-        // now send the payload
-        // payload must be at most 64KB!
-        packet = new DatagramPacket(
-                buffer,
-                buffer.length,
-                groupAddress, Integer.valueOf(PROPERTIES.getProperty(CLIENT_PORT)));
-        serverSocket.send(packet);
+            // now send the payload
+            // payload must be at most 64KB!
+            packet = new DatagramPacket(
+                    buffer,
+                    buffer.length,
+                    groupAddress, Integer.valueOf(PROPERTIES.getProperty(CLIENT_PORT)));
+            serverSocket.send(packet);
+        } catch (IOException ex) {
+            Logger.getLogger(MulticastServerThread.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(MulticastServerThread.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 }

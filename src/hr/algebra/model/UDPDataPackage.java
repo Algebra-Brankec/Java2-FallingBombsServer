@@ -46,34 +46,12 @@ public class UDPDataPackage implements Externalizable {
     
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
-        //out.writeInt(bombs.size());
-        //for (Bomb bomb : bombs) {
-        //  out.writeObject(bomb);
-        //}
-        //
-        //out.writeInt(players.size());
-        //for (Player player : players) {
-        //  out.writeObject(player);
-        //}
-        
         out.writeObject(bombs);
         out.writeObject(players);
     }
     
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        //int bombsNo = (int) in.readInt();
-        //for (int i = 0; i < bombsNo; i++) {
-        //  Bomb bomb = (Bomb) in.readObject();
-        //  bombs.add(bomb);
-        //}
-        //
-        //int playersNo = (int) in.readInt();
-        //for (int i = 0; i < playersNo; i++) {
-        //  Player player = (Player) in.readObject();
-        //  players.add(player);
-        //}
-        
         bombs = (List<Bomb>) in.readObject();
         players = (List<Player>) in.readObject();
     }

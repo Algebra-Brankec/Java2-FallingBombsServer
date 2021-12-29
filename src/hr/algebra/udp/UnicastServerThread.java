@@ -22,12 +22,11 @@ import java.util.logging.Logger;
  * @author daniel.bele
  */
 public class UnicastServerThread extends Thread {
-
-    private static final String HOST = "localhost";
-    private static int SERVER_PORT = 12345;
+    private static int SERVER_PORT;
     
     private boolean isActive = false;
-    private int playerMovement;
+    private static int playerMovement;
+    private static int oldPlayerMovement = -1;
     
     public UnicastServerThread(int port) {
         SERVER_PORT = port;
@@ -57,7 +56,10 @@ public class UnicastServerThread extends Thread {
                 serverSocket.receive(packet);
                 playerMovement = ByteUtils.byteArrayToInt(numberOfUDPDataPackageBytes);
                 
-                //System.out.println("player: " + playerMovement);
+                if (playerMovement != oldPlayerMovement) {
+                    System.out.println("player: " + playerMovement);
+                    oldPlayerMovement = playerMovement;
+                }
             }
             
             
@@ -74,10 +76,7 @@ public class UnicastServerThread extends Thread {
         //0 - standing still
         //1 - moving left
         //2 - moving right
-        int playerMov = playerMovement;
-        playerMovement = 0;
-        
-        return playerMov;
+        return playerMovement;
     }
 
     public boolean isIsActive() {
