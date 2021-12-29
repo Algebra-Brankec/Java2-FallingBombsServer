@@ -57,7 +57,7 @@ public class UnicastServerThread extends Thread {
                 serverSocket.receive(packet);
                 playerMovement = ByteUtils.byteArrayToInt(numberOfUDPDataPackageBytes);
                 
-                System.out.println("player: " + playerMovement);
+                //System.out.println("player: " + playerMovement);
             }
             
             

@@ -9,6 +9,7 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,8 +17,8 @@ import java.util.List;
  * @author brand
  */
 public class UDPDataPackage implements Externalizable {
-    private List<Bomb> bombs;
-    private List<Player> players;
+    private List<Bomb> bombs = new ArrayList<>();
+    private List<Player> players = new ArrayList<>();
     
     public UDPDataPackage(List<Bomb> bombs, List<Player> players) {
         this.bombs = bombs;

@@ -8,11 +8,15 @@ package hr.algebra;
 import hr.algebra.model.Bomb;
 import hr.algebra.model.Player;
 import hr.algebra.model.UDPDataPackage;
+import hr.algebra.udp.MulticastServerThread;
+import hr.algebra.udp.UnicastServerThread;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -29,7 +33,10 @@ public class Game {
     private double deleteLine = 600;
     private List<Player> players;
     
-    private Boolean running = true;
+    MulticastServerThread t1;
+    
+    private UnicastServerThread unicastServThread1;
+    private UnicastServerThread unicastServThread2;
     
     public Game() {
         bombs = new ArrayList<>();
@@ -37,6 +44,7 @@ public class Game {
     }
     
     public void start() {
+        startUDCSockets();
         gameLoop();
     }
     
@@ -50,10 +58,37 @@ public class Game {
         //    return;
         //}
         
-        SpawnBombs();
-        MoveBombs();
-        CheckBombCollision();
-        ClearBombsOutsideMap();
+        Thread gameThread = new Thread(() -> {
+            Calendar cal = Calendar.getInstance();
+            int now = (int) cal.getTimeInMillis();
+            int lastFrame = (int) cal.getTimeInMillis();
+
+            while(true)
+            {
+                //limiting the while loop to 30 times a second
+                now = (int) cal.getTimeInMillis();
+                int delta = now - lastFrame;
+                lastFrame = now;
+
+                if(delta < 33)
+                {
+                    try {
+                        Thread.sleep(33 - delta);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+
+                SpawnBombs();
+                MoveBombs();
+                CheckBombCollision();
+                ClearBombsOutsideMap();
+
+                t1.setUdpPackage(getUDPDataPackage());
+            }
+        });  
+        gameThread.setDaemon(true);
+        gameThread.start();
     }
     
     public UDPDataPackage getUDPDataPackage() {
@@ -130,5 +165,23 @@ public class Game {
         
         return (aMinX <= bMaxX && aMaxX >= bMinX) &&
                (aMinY <= bMaxY && aMaxY >= bMinY);
+    }
+    
+    private void startUDCSockets() {
+        t1 = new MulticastServerThread();
+        t1.setDaemon(true);
+        t1.start();
+        
+        unicastServThread1 = new UnicastServerThread(12345);
+        unicastServThread1.setDaemon(true);
+        unicastServThread1.start();
+        
+        //unicastServThread2 = new UnicastServerThread(12346);
+        //unicastServThread2.setDaemon(true);
+        //unicastServThread2.start();
+    }
+    
+    private void loadPlayerClientMovement() {
+        
     }
 }

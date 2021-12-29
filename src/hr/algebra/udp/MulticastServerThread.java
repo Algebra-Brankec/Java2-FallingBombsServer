@@ -37,15 +37,6 @@ public class MulticastServerThread extends Thread {
     private static final Properties PROPERTIES = new Properties();
     
     private UDPDataPackage udpPackage = new UDPDataPackage();
-    
-    private UnicastServerThread unicastServThread1;
-    private UnicastServerThread unicastServThread2;
-    
-    private List<Player> player = new ArrayList<>();
-
-    public UDPDataPackage getUdpPackage() {
-        return udpPackage;
-    }
 
     public void setUdpPackage(UDPDataPackage udpPackage) {
         this.udpPackage = udpPackage;
@@ -62,14 +53,10 @@ public class MulticastServerThread extends Thread {
     @Override
     public void run() {
         try (DatagramSocket serverSocket = new DatagramSocket()) {
-            Game game = new Game();
-            
-            readPlayerInput();
             
             Calendar cal = Calendar.getInstance();
             int now = (int) cal.getTimeInMillis();
             int lastFrame = (int) cal.getTimeInMillis();
-            
             while(true)
             {
                 //limiting the while loop to 30 times a second
@@ -81,10 +68,6 @@ public class MulticastServerThread extends Thread {
                 {
                     Thread.sleep(33 - delta);
                 }
-                
-                game.start();
-                
-                udpPackage = game.getUDPDataPackage();
                 
                 //dont send unless there is something on the screen
                 if ((udpPackage.getBombs().size() < 1 && udpPackage.getPlayers().size() < 1)) {
@@ -120,15 +103,5 @@ public class MulticastServerThread extends Thread {
                 buffer.length,
                 groupAddress, Integer.valueOf(PROPERTIES.getProperty(CLIENT_PORT)));
         serverSocket.send(packet);
-    }
-    
-    private void readPlayerInput() {
-        unicastServThread1 = new UnicastServerThread(12345);
-        unicastServThread1.setDaemon(true);
-        unicastServThread1.start();
-        
-        unicastServThread2 = new UnicastServerThread(12346);
-        unicastServThread2.setDaemon(true);
-        unicastServThread2.start();
     }
 }
