@@ -1,0 +1,27 @@
+.buttonFloor{
+    -fx-background-color: #964B00;
+}
+
+.buttonFence{
+    -fx-background-color: #505050;
+}
+
+.buttonPlayer1{
+    -fx-background-color: #006400;
+}
+
+.buttonPlayer2{
+    -fx-background-color: #990000;
+}
+
+.anchorSky{
+    -fx-background-color: #ADD8E6;
+}
+
+.buttonHealthBox {
+    -fx-background-color: #808080;
+}
+
+.buttonHealth {
+    -fx-background-color: red;
+}
