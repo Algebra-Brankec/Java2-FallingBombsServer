@@ -13,15 +13,17 @@ import java.util.Random;
  * @author brand
  */
 public class Player implements Serializable {
+    private short id = 0;
+    
     private short x;
     private short y;
     private short width;
     private short height;
     
-    private int maxHealth = 3;
-    private int health = 3;
+    private short maxHealth = 3;
+    private short health = 3;
     private boolean stunned = false;
-    private int speed = 20;
+    private short speed = 20;
 
     public Player() {
         this.width  =   (short)(50);
@@ -64,12 +66,20 @@ public class Player implements Serializable {
         health = 0;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = (short)id;
+    }
+
     public int getMaxHealth() {
         return maxHealth;
     }
 
     public void setMaxHealth(int maxHealth) {
-        this.maxHealth = maxHealth;
+        this.maxHealth = (short)maxHealth;
     }
 
     public int getHealth() {
@@ -77,7 +87,7 @@ public class Player implements Serializable {
     }
 
     public void setHealth(int health) {
-        this.health = health;
+        this.health = (short)health;
     }
 
     public boolean isStunned() {
@@ -93,7 +103,7 @@ public class Player implements Serializable {
     }
 
     public void setSpeed(int speed) {
-        this.speed = speed;
+        this.speed = (short)speed;
     }
 
     public int getX() {
