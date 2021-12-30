@@ -13,7 +13,7 @@ import java.util.Random;
  * @author brand
  */
 public class Player implements Serializable {
-    private short id;
+    private int id;
     private short side;
     
     private short x;
@@ -29,17 +29,19 @@ public class Player implements Serializable {
     private boolean isActive = false;
 
     public Player(int id, String side) {
-        this.id     =   (short)(id);
+        this.id     =   id;
         switch(side){
             case "left":
                 this.side = 1;
+                break;
             case "right":
-                this.side = 2;    
+                this.side = 2;  
+                break;
         }
         
         this.width  =   (short)(50);
         this.height =   (short)(90);
-        this.x      =   (short)(100 * this.side);
+        this.x      =   (short)(100 + ((this.side-1) * 600 ));
         this.y      =   (short)(410);
     }
     
@@ -75,6 +77,10 @@ public class Player implements Serializable {
         stunned = true;
         speed = 0;
         health = 0;
+    }
+
+    public short getSide() {
+        return side;
     }
 
     public boolean isIsActive() {

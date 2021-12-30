@@ -32,6 +32,7 @@ public class Game {
     private int bombFrequency = 100;
     private double deleteLine = 600;
     private List<Player> players;
+    private boolean running = true;
     
     MulticastServerThread t1;
     
@@ -41,8 +42,8 @@ public class Game {
     public Game() {
         bombs = new ArrayList<>();
         players = new ArrayList<>();
-        players.add(new Player(0, "left"));
-        players.add(new Player(1, "right"));
+        players.add(new Player(34530, "left"));
+        players.add(new Player(34531, "right"));
     }
     
     public void start() {
@@ -82,6 +83,14 @@ public class Game {
                 }
 
                 try {
+                    if(!running){
+                        return;
+                    }
+                    
+                    if (!(players.get(0).getHealth() > 0 || players.get(1).getHealth() > 0)) {
+                        running = false;
+                        return;
+                    }
                     SpawnBombs();
                     MoveBombs();
                     CheckBombCollision();
@@ -172,16 +181,19 @@ public class Game {
         t1.setDaemon(true);
         t1.start();
         
-        unicastServThread1 = new UnicastServerThread(34530);
+        unicastServThread1 = new UnicastServerThread(players.get(0).getId());
         unicastServThread1.setDaemon(true);
         unicastServThread1.start();
         
-        unicastServThread2 = new UnicastServerThread(34531);
+        unicastServThread2 = new UnicastServerThread(players.get(1).getId());
         unicastServThread2.setDaemon(true);
         unicastServThread2.start();
     }
     
     private void loadPlayerClientMovement() {
-        
+        if(unicastServThread1.getPlayerMovement() == 1)
+            players.get(0).setX(players.get(0).getX() - players.get(0).getSpeed());
+        if(unicastServThread1.getPlayerMovement() == 2)
+            players.get(0).setX(players.get(0).getX() + players.get(0).getSpeed());
     }
 }
