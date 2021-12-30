@@ -92,11 +92,13 @@ public class GameController implements Initializable {
                     try {
                         if(!running){
                             resumeGame();
+                            delta--;
                             continue;
                         }
 
                         if (players.get(0).getHealth() < 1 || players.get(1).getHealth() < 1) {
                             running = false;
+                            delta--;
                             continue;
                         }
                         SpawnBombs();
