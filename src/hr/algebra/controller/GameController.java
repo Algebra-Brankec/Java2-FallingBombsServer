@@ -8,8 +8,12 @@ package hr.algebra.controller;
 import hr.algebra.model.Bomb;
 import hr.algebra.model.Player;
 import hr.algebra.model.UDPDataPackage;
+import hr.algebra.repository.Repository;
 import hr.algebra.udp.MulticastServerGameDataThread;
 import hr.algebra.udp.UnicastServerPlayerActionThread;
+import hr.algebra.utilities.FileUtils;
+import hr.algebra.utilities.SerializationUtils;
+import java.io.File;
 import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.SocketException;
@@ -22,10 +26,12 @@ import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -94,6 +100,9 @@ public class GameController implements Initializable {
                 lastTime = now;
                 while(delta >= 1){
                     try {
+                        txtPlayers.setText(""+players.size());
+                        txtBombs.setText(""+bombs.size());
+                        
                         if(!running){
                             resumeGame();
                             t1.setUdpPackage(getUDPDataPackage());
@@ -112,9 +121,6 @@ public class GameController implements Initializable {
                         CheckBombCollision();
                         ClearBombsOutsideMap(); 
                         loadPlayerClientActions();
-                        
-                        txtPlayers.setText(""+players.size());
-                        txtBombs.setText(""+bombs.size());
                     } catch (Exception e){
 
                     }
@@ -249,6 +255,34 @@ public class GameController implements Initializable {
             case 100:
                 running = true;
                 break;
+        }
+    }
+
+    @FXML
+    private void deserialize(ActionEvent event) {
+        File file = FileUtils.uploadFileDialog(txtBombs.getScene().getWindow(), "ser");
+        if (file != null) {
+            try {
+                // we do not need a returned instance of Repository, because it is a Singleton
+                // also, we do not need to refresh the form, because of the observable pattern
+                UDPDataPackage udpDataPackage = (UDPDataPackage) SerializationUtils.read(file.getAbsolutePath());
+                players = udpDataPackage.getPlayers();
+                bombs = udpDataPackage.getBombs();
+            } catch (IOException | ClassNotFoundException ex) {
+                Logger.getLogger(GameController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    @FXML
+    private void serialize(ActionEvent event) {
+        try {
+            File file = FileUtils.saveFileDialog(txtBombs.getScene().getWindow(), "ser");
+            if (file != null) {
+                SerializationUtils.write(getUDPDataPackage(), file.getAbsolutePath());
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(GameController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
