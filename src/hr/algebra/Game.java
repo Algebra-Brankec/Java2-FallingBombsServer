@@ -134,14 +134,16 @@ public class Game {
     
     private void CheckBombCollision()
     {
-        //for (BtnBomb bomb : bombs) {
-        //    
-        //    //if bombs hit the player then take damage and then mark the bomb for delete
-        //    if (isIntersect(player, bomb) && !bomb.disableProperty().get()) {
-        //        player.takeDamage(bomb.damage);
-        //        bomb.setDisable(true);
-        //    }
-        //}
+        for (Bomb bomb : bombs) {
+            //if bombs hit the player then take damage and then mark the bomb for delete
+            
+            for (Player player : players) {
+                if (isIntersect(player, bomb) && bomb.getActive()) {
+                    player.takeDamage(bomb.getDamage());
+                    bomb.setActive(false);
+                }
+            }
+        }
     }
     
     private void ClearBombsOutsideMap() {
@@ -161,16 +163,16 @@ public class Game {
         bombsToClear.clear();
     }
     
-    private boolean isIntersect(Button a, Button b) {
-        double aMinX = a.layoutXProperty().get();
-        double aMaxX = a.layoutXProperty().get() + a.widthProperty().get();
-        double aMinY = a.layoutYProperty().get();
-        double aMaxY = a.layoutYProperty().get() + a.heightProperty().get();
+    private boolean isIntersect(Player a, Bomb b) {
+        double aMinX = a.getX();
+        double aMaxX = a.getX() + a.getWidth();
+        double aMinY = a.getY();
+        double aMaxY = a.getY() + a.getHeight();
         
-        double bMinX = b.layoutXProperty().get();
-        double bMaxX = b.layoutXProperty().get() + b.widthProperty().get();
-        double bMinY = b.layoutYProperty().get();
-        double bMaxY = b.layoutYProperty().get() + b.heightProperty().get();
+        double bMinX = b.getX();
+        double bMaxX = b.getX() + b.getWidth();
+        double bMinY = b.getY();
+        double bMaxY = b.getY() + b.getHeight();
         
         return (aMinX <= bMaxX && aMaxX >= bMinX) &&
                (aMinY <= bMaxY && aMaxY >= bMinY);

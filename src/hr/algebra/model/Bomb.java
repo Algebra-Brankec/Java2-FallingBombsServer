@@ -18,6 +18,8 @@ public class Bomb implements Serializable {
     private short width;
     private short height;
     
+    private short damage;
+    
     private Boolean active;
 
     public Bomb(int windowWidth) {
@@ -26,6 +28,16 @@ public class Bomb implements Serializable {
         this.height =   (short)(rand.nextInt(200 - 40) + 40);
         this.x      =   (short)(rand.nextInt(windowWidth));
         this.y      =   (short)(rand.nextInt(1));
+        this.damage =   (short)1;
+        this.active =   true;
+    }
+
+    public short getDamage() {
+        return damage;
+    }
+
+    public void setDamage(short damage) {
+        this.damage = damage;
     }
     
     public Boolean getActive() {
