@@ -5,7 +5,6 @@
  */
 package hr.algebra.udp;
 
-import hr.algebra.Game;
 import hr.algebra.model.Player;
 import hr.algebra.model.UDPDataPackage;
 import hr.algebra.utilities.ByteUtils;

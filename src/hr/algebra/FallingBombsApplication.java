@@ -24,9 +24,6 @@ public class FallingBombsApplication extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("view/Game.fxml"));
         Scene scene = new Scene(root);
         
-        Game game = new Game();
-        game.start();
-        
         primaryStage.setTitle("Hello World!");
         primaryStage.setScene(scene);
         primaryStage.show();
