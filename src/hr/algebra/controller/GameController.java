@@ -25,9 +25,11 @@ import java.util.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
 
 /**
  * FXML Controller class
@@ -50,7 +52,9 @@ public class GameController implements Initializable {
     private UnicastServerPlayerActionThread unicastServThread2;
     
     @FXML
-    private AnchorPane apLevel;
+    private Text txtBombs;
+    @FXML
+    private Text txtPlayers;
 
     /**
      * Initializes the controller class.
@@ -108,6 +112,9 @@ public class GameController implements Initializable {
                         CheckBombCollision();
                         ClearBombsOutsideMap(); 
                         loadPlayerClientActions();
+                        
+                        txtPlayers.setText(""+players.size());
+                        txtBombs.setText(""+bombs.size());
                     } catch (Exception e){
 
                     }

@@ -2,9 +2,14 @@
 
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
 
 <AnchorPane id="AnchorPane" onKeyPressed="#keyPressed" onKeyReleased="#keyReleased" prefHeight="231.0" prefWidth="302.0" stylesheets="@../style/main.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.algebra.controller.GameController">
    <children>
       <Label layoutX="131.0" layoutY="107.0" text="SERVER" />
+      <Label layoutX="14.0" layoutY="14.0" text="Bombs:" />
+      <Label layoutX="14.0" layoutY="37.0" text="Players:" />
+      <Text fx:id="txtBombs" layoutX="56.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+      <Text fx:id="txtPlayers" layoutX="56.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
    </children>
 </AnchorPane>
