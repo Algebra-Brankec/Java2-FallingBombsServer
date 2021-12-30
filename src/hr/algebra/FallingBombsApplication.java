@@ -5,7 +5,7 @@
  */
 package hr.algebra;
 
-import hr.algebra.udp.MulticastServerThread;
+import hr.algebra.udp.MulticastServerGameDataThread;
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

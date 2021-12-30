@@ -29,7 +29,7 @@ import java.util.List;
  *
  * @author daniel.bele
  */
-public class MulticastServerThread extends Thread {
+public class MulticastServerGameDataThread extends Thread {
     
     private static final String PROPERTIES_FILE = "socket.properties";
     private static final String CLIENT_PORT = "CLIENT_PORT";
@@ -46,7 +46,7 @@ public class MulticastServerThread extends Thread {
         try {
             PROPERTIES.load(new FileInputStream(PROPERTIES_FILE));
         } catch (IOException ex) {
-            Logger.getLogger(MulticastServerThread.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MulticastServerGameDataThread.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -72,7 +72,7 @@ public class MulticastServerThread extends Thread {
                 }
             }
         } catch (SocketException ex) {
-            Logger.getLogger(MulticastServerThread.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MulticastServerGameDataThread.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -98,9 +98,9 @@ public class MulticastServerThread extends Thread {
                     groupAddress, Integer.valueOf(PROPERTIES.getProperty(CLIENT_PORT)));
             serverSocket.send(packet);
         } catch (IOException ex) {
-            Logger.getLogger(MulticastServerThread.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MulticastServerGameDataThread.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
-            Logger.getLogger(MulticastServerThread.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MulticastServerGameDataThread.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }

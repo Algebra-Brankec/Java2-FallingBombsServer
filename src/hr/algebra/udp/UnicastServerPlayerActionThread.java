@@ -22,14 +22,14 @@ import java.util.logging.Logger;
  *
  * @author daniel.bele
  */
-public class UnicastServerThread extends Thread {
+public class UnicastServerPlayerActionThread extends Thread {
     private int SERVER_PORT;
     
     private boolean isActive = false;
     private int playerAction;
     private int oldPlayerMovement = -1;
     
-    public UnicastServerThread(int port) {
+    public UnicastServerPlayerActionThread(int port) {
         SERVER_PORT = port;
     }
     
@@ -60,9 +60,9 @@ public class UnicastServerThread extends Thread {
                 }
             }
         } catch (SocketException ex) {
-            Logger.getLogger(UnicastServerThread.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UnicastServerPlayerActionThread.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(UnicastServerThread.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UnicastServerPlayerActionThread.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

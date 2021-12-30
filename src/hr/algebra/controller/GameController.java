@@ -8,8 +8,8 @@ package hr.algebra.controller;
 import hr.algebra.model.Bomb;
 import hr.algebra.model.Player;
 import hr.algebra.model.UDPDataPackage;
-import hr.algebra.udp.MulticastServerThread;
-import hr.algebra.udp.UnicastServerThread;
+import hr.algebra.udp.MulticastServerGameDataThread;
+import hr.algebra.udp.UnicastServerPlayerActionThread;
 import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.SocketException;
@@ -44,10 +44,10 @@ public class GameController implements Initializable {
     
     private boolean running = false;
     
-    MulticastServerThread t1;
+    MulticastServerGameDataThread t1;
     
-    private UnicastServerThread unicastServThread1;
-    private UnicastServerThread unicastServThread2;
+    private UnicastServerPlayerActionThread unicastServThread1;
+    private UnicastServerPlayerActionThread unicastServThread2;
     
     @FXML
     private AnchorPane apLevel;
@@ -193,15 +193,15 @@ public class GameController implements Initializable {
     }
     
     private void startUDCSockets() {
-        t1 = new MulticastServerThread();
+        t1 = new MulticastServerGameDataThread();
         t1.setDaemon(true);
         t1.start();
         
-        unicastServThread1 = new UnicastServerThread(players.get(0).getId());
+        unicastServThread1 = new UnicastServerPlayerActionThread(players.get(0).getId());
         unicastServThread1.setDaemon(true);
         unicastServThread1.start();
         
-        unicastServThread2 = new UnicastServerThread(players.get(1).getId());
+        unicastServThread2 = new UnicastServerPlayerActionThread(players.get(1).getId());
         unicastServThread2.setDaemon(true);
         unicastServThread2.start();
     }
