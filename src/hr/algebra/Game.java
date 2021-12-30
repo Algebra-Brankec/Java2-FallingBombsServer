@@ -19,7 +19,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.AnchorPane;
 
 /**
@@ -87,7 +90,7 @@ public class Game {
                         return;
                     }
                     
-                    if (!(players.get(0).getHealth() > 0 || players.get(1).getHealth() > 0)) {
+                    if (players.get(0).getHealth() < 1 || players.get(1).getHealth() < 1) {
                         running = false;
                         return;
                     }
