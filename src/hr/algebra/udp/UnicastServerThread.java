@@ -11,6 +11,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
@@ -37,38 +38,29 @@ public class UnicastServerThread extends Thread {
         try(DatagramSocket serverSocket = new DatagramSocket(SERVER_PORT)) {
             serverSocket.setReuseAddress(true);
             
-            Calendar cal = Calendar.getInstance();
-            int now = (int) cal.getTimeInMillis();
-            int lastFrame = (int) cal.getTimeInMillis();
-            while (true) { 
-                //limiting the while loop to 30 times a second
-                now = (int) cal.getTimeInMillis();
-                int delta = now - lastFrame;
-                lastFrame = now;
+            long lastTime = System.nanoTime();
+            final double ns = 1000000000.0 / 60.0;
+            double delta = 0;
+            while(true){
+                long now = System.nanoTime();
+                delta += (now - lastTime) / ns;
+                lastTime = now;
+                while(delta >= 1){
+                    // first we read the payload length
+                    byte[] numberOfUDPDataPackageBytes = new byte[4];
+                    DatagramPacket packet = new DatagramPacket(numberOfUDPDataPackageBytes, numberOfUDPDataPackageBytes.length);
+                    serverSocket.receive(packet);
+                    playerAction = ByteUtils.byteArrayToInt(numberOfUDPDataPackageBytes);
 
-                if(delta < 33)
-                {
-                    Thread.sleep(33 - delta);
-                }
-                
-                // first we read the payload length
-                byte[] numberOfUDPDataPackageBytes = new byte[4];
-                DatagramPacket packet = new DatagramPacket(numberOfUDPDataPackageBytes, numberOfUDPDataPackageBytes.length);
-                serverSocket.receive(packet);
-                playerAction = ByteUtils.byteArrayToInt(numberOfUDPDataPackageBytes);
-                
-                if (playerAction != oldPlayerMovement) {
-                    System.out.println("player: " + playerAction);
-                    oldPlayerMovement = playerAction;
+                    if (playerAction != oldPlayerMovement) {
+                        System.out.println("player: " + playerAction);
+                        oldPlayerMovement = playerAction;
+                    }
                 }
             }
-            
-            
         } catch (SocketException ex) {
             Logger.getLogger(UnicastServerThread.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(UnicastServerThread.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InterruptedException ex) {
             Logger.getLogger(UnicastServerThread.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

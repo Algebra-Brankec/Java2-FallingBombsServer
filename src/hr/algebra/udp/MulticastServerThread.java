@@ -22,6 +22,7 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import hr.algebra.utilities.ObjectUtil;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,31 +55,23 @@ public class MulticastServerThread extends Thread {
     public void run() {
         try (DatagramSocket serverSocket = new DatagramSocket()) {
             
-            Calendar cal = Calendar.getInstance();
-            int now = (int) cal.getTimeInMillis();
-            int lastFrame = (int) cal.getTimeInMillis();
-            while(true)
-            {
-                //limiting the while loop to 30 times a second
-                now = (int) cal.getTimeInMillis();
-                int delta = now - lastFrame;
-                lastFrame = now;
+            long lastTime = System.nanoTime();
+            final double ns = 1000000000.0 / 30.0;
+            double delta = 0;
+            while(true){
+                long now = System.nanoTime();
+                delta += (now - lastTime) / ns;
+                lastTime = now;
+                while(delta >= 1){
+                    //dont send unless there is something on the screen
+                    if ((udpPackage.getBombs().size() < 1 && udpPackage.getPlayers().size() < 1)) {
+                        continue;
+                    }
 
-                if(delta < 33)
-                {
-                    Thread.sleep(33 - delta);
+                    sendUDPDataPackage(serverSocket);
                 }
-                
-                //dont send unless there is something on the screen
-                if ((udpPackage.getBombs().size() < 1 && udpPackage.getPlayers().size() < 1)) {
-                    continue;
-                }
-                
-                sendUDPDataPackage(serverSocket);
             }
         } catch (SocketException ex) {
-            Logger.getLogger(MulticastServerThread.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException | InterruptedException ex) {
             Logger.getLogger(MulticastServerThread.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
