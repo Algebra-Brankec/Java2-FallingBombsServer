@@ -22,7 +22,7 @@ import java.util.logging.Logger;
  * @author daniel.bele
  */
 public class UnicastServerThread extends Thread {
-    private static int SERVER_PORT;
+    private int SERVER_PORT;
     
     private boolean isActive = false;
     private static int playerMovement;
@@ -35,6 +35,7 @@ public class UnicastServerThread extends Thread {
     @Override
     public void run() {
         try(DatagramSocket serverSocket = new DatagramSocket(SERVER_PORT)) {
+            serverSocket.setReuseAddress(true);
             
             Calendar cal = Calendar.getInstance();
             int now = (int) cal.getTimeInMillis();

@@ -41,6 +41,8 @@ public class Game {
     public Game() {
         bombs = new ArrayList<>();
         players = new ArrayList<>();
+        players.add(new Player(0, "left"));
+        players.add(new Player(1, "right"));
     }
     
     public void start() {
@@ -84,6 +86,7 @@ public class Game {
                     MoveBombs();
                     CheckBombCollision();
                     ClearBombsOutsideMap(); 
+                    loadPlayerClientMovement();
                 } catch (Exception e){
                     
                 }
@@ -169,13 +172,13 @@ public class Game {
         t1.setDaemon(true);
         t1.start();
         
-        unicastServThread1 = new UnicastServerThread(12345);
+        unicastServThread1 = new UnicastServerThread(34530);
         unicastServThread1.setDaemon(true);
         unicastServThread1.start();
         
-        //unicastServThread2 = new UnicastServerThread(8080);
-        //unicastServThread2.setDaemon(true);
-        //unicastServThread2.start();
+        unicastServThread2 = new UnicastServerThread(34531);
+        unicastServThread2.setDaemon(true);
+        unicastServThread2.start();
     }
     
     private void loadPlayerClientMovement() {
