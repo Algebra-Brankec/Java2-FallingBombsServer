@@ -195,5 +195,10 @@ public class Game {
             players.get(0).setX(players.get(0).getX() - players.get(0).getSpeed());
         if(unicastServThread1.getPlayerMovement() == 2)
             players.get(0).setX(players.get(0).getX() + players.get(0).getSpeed());
+        
+        if(unicastServThread2.getPlayerMovement() == 1)
+            players.get(1).setX(players.get(1).getX() - players.get(1).getSpeed());
+        if(unicastServThread2.getPlayerMovement() == 2)
+            players.get(1).setX(players.get(1).getX() + players.get(1).getSpeed());
     }
 }

@@ -25,8 +25,8 @@ public class UnicastServerThread extends Thread {
     private int SERVER_PORT;
     
     private boolean isActive = false;
-    private static int playerMovement;
-    private static int oldPlayerMovement = -1;
+    private int playerMovement;
+    private int oldPlayerMovement = -1;
     
     public UnicastServerThread(int port) {
         SERVER_PORT = port;
