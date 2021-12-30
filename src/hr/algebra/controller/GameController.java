@@ -42,7 +42,7 @@ public class GameController implements Initializable {
     private double deleteLine = 600;
     private List<Player> players;
     
-    private boolean running = true;
+    private boolean running = false;
     
     MulticastServerThread t1;
     
@@ -92,12 +92,14 @@ public class GameController implements Initializable {
                     try {
                         if(!running){
                             resumeGame();
+                            t1.setUdpPackage(getUDPDataPackage());
                             delta--;
                             continue;
                         }
 
                         if (players.get(0).getHealth() < 1 || players.get(1).getHealth() < 1) {
                             running = false;
+                            t1.setUdpPackage(getUDPDataPackage());
                             delta--;
                             continue;
                         }
