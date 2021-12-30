@@ -19,6 +19,8 @@ import java.util.List;
 public class UDPDataPackage implements Externalizable {
     private List<Bomb> bombs = new ArrayList<>();
     private List<Player> players = new ArrayList<>();
+    private boolean isPaused;
+    private boolean gameOver;
     
     public UDPDataPackage(List<Bomb> bombs, List<Player> players) {
         this.bombs = bombs;
@@ -26,6 +28,22 @@ public class UDPDataPackage implements Externalizable {
     }
     
     public UDPDataPackage() {
+    }
+
+    public boolean isIsPaused() {
+        return isPaused;
+    }
+
+    public void setIsPaused(boolean isPaused) {
+        this.isPaused = isPaused;
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
     }
 
     public List<Bomb> getBombs() {

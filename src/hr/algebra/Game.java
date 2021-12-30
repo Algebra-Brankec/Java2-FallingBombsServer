@@ -35,6 +35,7 @@ public class Game {
     private int bombFrequency = 100;
     private double deleteLine = 600;
     private List<Player> players;
+    
     private boolean running = true;
     
     MulticastServerThread t1;
@@ -87,18 +88,19 @@ public class Game {
 
                 try {
                     if(!running){
-                        return;
+                        resumeGame();
+                        continue;
                     }
                     
                     if (players.get(0).getHealth() < 1 || players.get(1).getHealth() < 1) {
                         running = false;
-                        return;
+                        continue;
                     }
                     SpawnBombs();
                     MoveBombs();
                     CheckBombCollision();
                     ClearBombsOutsideMap(); 
-                    loadPlayerClientMovement();
+                    loadPlayerClientActions();
                 } catch (Exception e){
                     
                 }
@@ -120,7 +122,7 @@ public class Game {
         int randInt2 = rand.nextInt(bombFrequency);
 
         if (randInt1 == randInt2) {
-            Bomb bomb = new Bomb(600);
+            Bomb bomb = new Bomb(800);
             bombs.add(bomb);
             
             if (bombFrequency > 20) {
@@ -195,15 +197,42 @@ public class Game {
         unicastServThread2.start();
     }
     
-    private void loadPlayerClientMovement() {
-        if(unicastServThread1.getPlayerMovement() == 1)
-            players.get(0).setX(players.get(0).getX() - players.get(0).getSpeed());
-        if(unicastServThread1.getPlayerMovement() == 2)
-            players.get(0).setX(players.get(0).getX() + players.get(0).getSpeed());
+    private void loadPlayerClientActions() {
+        switch(unicastServThread1.getPlayerAction()) {
+            case 1:
+                players.get(0).setX(players.get(0).getX() - players.get(0).getSpeed());
+                break;
+            case 2:
+                players.get(0).setX(players.get(0).getX() + players.get(0).getSpeed());
+                break;
+            case 101:
+                running = false;
+                break;
+        }
         
-        if(unicastServThread2.getPlayerMovement() == 1)
-            players.get(1).setX(players.get(1).getX() - players.get(1).getSpeed());
-        if(unicastServThread2.getPlayerMovement() == 2)
-            players.get(1).setX(players.get(1).getX() + players.get(1).getSpeed());
+        switch(unicastServThread2.getPlayerAction()) {
+            case 1:
+                players.get(1).setX(players.get(1).getX() - players.get(1).getSpeed());
+                break;
+            case 2:
+                players.get(1).setX(players.get(1).getX() + players.get(1).getSpeed());
+                break;
+            case 101:
+                running = false;
+                break;
+        }
+    }
+    
+    private void resumeGame() {
+        switch(unicastServThread1.getPlayerAction()) {
+            case 100:
+                running = true;
+                break;
+        }
+        switch(unicastServThread2.getPlayerAction()) {
+            case 100:
+                running = true;
+                break;
+        }
     }
 }

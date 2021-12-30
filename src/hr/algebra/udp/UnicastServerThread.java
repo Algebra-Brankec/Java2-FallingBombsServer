@@ -25,7 +25,7 @@ public class UnicastServerThread extends Thread {
     private int SERVER_PORT;
     
     private boolean isActive = false;
-    private int playerMovement;
+    private int playerAction;
     private int oldPlayerMovement = -1;
     
     public UnicastServerThread(int port) {
@@ -55,11 +55,11 @@ public class UnicastServerThread extends Thread {
                 byte[] numberOfUDPDataPackageBytes = new byte[4];
                 DatagramPacket packet = new DatagramPacket(numberOfUDPDataPackageBytes, numberOfUDPDataPackageBytes.length);
                 serverSocket.receive(packet);
-                playerMovement = ByteUtils.byteArrayToInt(numberOfUDPDataPackageBytes);
+                playerAction = ByteUtils.byteArrayToInt(numberOfUDPDataPackageBytes);
                 
-                if (playerMovement != oldPlayerMovement) {
-                    System.out.println("player: " + playerMovement);
-                    oldPlayerMovement = playerMovement;
+                if (playerAction != oldPlayerMovement) {
+                    System.out.println("player: " + playerAction);
+                    oldPlayerMovement = playerAction;
                 }
             }
             
@@ -73,11 +73,15 @@ public class UnicastServerThread extends Thread {
         }
     }
     
-    public int getPlayerMovement(){
+    public int getPlayerAction(){
         //0 - standing still
         //1 - moving left
         //2 - moving right
-        return playerMovement;
+        return playerAction;
+    }
+    
+    public void setPlayerAction(int value){
+        playerAction = value;
     }
 
     public boolean isIsActive() {
