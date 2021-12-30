@@ -56,6 +56,7 @@ public class UnicastServerThread extends Thread {
                         System.out.println("player: " + playerAction);
                         oldPlayerMovement = playerAction;
                     }
+                    delta--; 
                 }
             }
         } catch (SocketException ex) {

@@ -10,7 +10,11 @@ import hr.algebra.model.Player;
 import hr.algebra.model.UDPDataPackage;
 import hr.algebra.udp.MulticastServerThread;
 import hr.algebra.udp.UnicastServerThread;
+import java.io.IOException;
+import java.net.DatagramSocket;
+import java.net.SocketException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -75,56 +79,38 @@ public class GameController implements Initializable {
     }
     
     private void gameLoop() {
-        //if (players.size() != 2) {
-        //    return;
-        //}
-        //
-        //if (!(players.get(0).getHealth() > 0 || players.get(1).getHealth() > 0)) {
-        //    running = false;
-        //    return;
-        //}
-        
         Thread gameThread = new Thread(() -> {
-            Calendar cal = Calendar.getInstance();
-            int now = (int) cal.getTimeInMillis();
-            int lastFrame = (int) cal.getTimeInMillis();
-
-            while(true)
-            {
-                //limiting the while loop to 30 times a second
-                now = (int) cal.getTimeInMillis();
-                int delta = now - lastFrame;
-                lastFrame = now;
-
-                if(delta < 33)
-                {
+            
+            long lastTime = System.nanoTime();
+            final double ns = 1000000000.0 / 30.0;
+            double delta = 0;
+            while(true){
+                long now = System.nanoTime();
+                delta += (now - lastTime) / ns;
+                lastTime = now;
+                while(delta >= 1){
                     try {
-                        Thread.sleep(33 - delta);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(GameController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
+                        if(!running){
+                            resumeGame();
+                            continue;
+                        }
 
-                try {
-                    if(!running){
-                        resumeGame();
-                        continue;
+                        if (players.get(0).getHealth() < 1 || players.get(1).getHealth() < 1) {
+                            running = false;
+                            continue;
+                        }
+                        SpawnBombs();
+                        MoveBombs();
+                        CheckBombCollision();
+                        ClearBombsOutsideMap(); 
+                        loadPlayerClientActions();
+                    } catch (Exception e){
+
                     }
-                    
-                    if (players.get(0).getHealth() < 1 || players.get(1).getHealth() < 1) {
-                        running = false;
-                        continue;
-                    }
-                    SpawnBombs();
-                    MoveBombs();
-                    CheckBombCollision();
-                    ClearBombsOutsideMap(); 
-                    loadPlayerClientActions();
-                } catch (Exception e){
-                    
+
+                    t1.setUdpPackage(getUDPDataPackage());
+                    delta--;
                 }
-                
-                t1.setUdpPackage(getUDPDataPackage());
             }
         });  
         gameThread.setDaemon(true);

@@ -68,6 +68,7 @@ public class MulticastServerThread extends Thread {
                     }
 
                     sendUDPDataPackage(serverSocket);
+                    delta--;
                 }
             }
         } catch (SocketException ex) {
