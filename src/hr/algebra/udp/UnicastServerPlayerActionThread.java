@@ -53,7 +53,7 @@ public class UnicastServerPlayerActionThread extends Thread {
                     playerAction = ByteUtils.byteArrayToInt(numberOfUDPDataPackageBytes);
 
                     if (playerAction != oldPlayerMovement) {
-                        System.out.println("player: " + playerAction);
+                        //System.out.println("player: " + playerAction);
                         oldPlayerMovement = playerAction;
                     }
                     delta--; 
